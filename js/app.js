@@ -1,6 +1,9 @@
 
 $(document).ready(function(){
-	
+
+	var randomNumber;
+	var clicks=0; 
+
 	/*--- Display information modal box ---*/
   	$(".what").click(function(){
     	$(".overlay").fadeIn(1000);
@@ -16,10 +19,18 @@ $(document).ready(function(){
 		location.reload();
 	});
 
-  	$("#guessButton").click(function() {
+  	$("#guessButton").click(function(e) {
 
-  		function clickCounter() {
-  			var clicks=0; 							
+  		e.preventDefault();
+ 
+  		if (randomNumber == null) {
+  			randomNumber = generateNumber() 
+  		};
+
+  		clickCounter();
+  		compareNumbers();
+
+  		function clickCounter() {							
   			$("#count").html(clicks += 1);
   		};
   	
@@ -27,21 +38,22 @@ $(document).ready(function(){
   			var minNumber = 1;
   			var maxNumber = 100;
   			var randomNumber = Math.floor(Math.random() * (maxNumber - minNumber + 1)) + minNumber;
-  			$("#guessList").append("<li>" + randomNumber + "</li>");	
+  				
+  			return randomNumber;
   	 	};
 
 	  	function compareNumbers () {
 	  		var userGuess = $("#userGuess").val();   
-  	 		var difference = math.abs(parseInt(userGuess - randomNumber));
+  	 		var difference = Math.abs(parseInt(userGuess - randomNumber));
+
+  	 		$("#guessList").append("<li>" + userGuess + "</li>");
 
 	  		function wrongNumber(message) {   
-	  			var retVal = confirm(message);
-	  			if (retVal == true){
-		  			location.reload();
-		  		}
+	  			confirm(message);
 	  		};
 
-			if (difference = 0) {
+
+			if (difference == 0) {
 				alert ("You Guessed Correctly! Hooray!");
 
 			} else if (difference >= 50 && difference <= 100) {
@@ -59,11 +71,11 @@ $(document).ready(function(){
 			} else if (difference >= 1 && difference <= 9)  {
 				wrongNumber("You are very hot! Try again!");
 
-			} else (difference >= 10 && difference <= 19)  {
+			} else {
 				wrongNumber("You did not enter a number between 1 and 100.  Please try again!");
-			};
+			} 
 		};
-	};
+	});
 });
 
 
